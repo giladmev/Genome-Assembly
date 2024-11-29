@@ -8,7 +8,7 @@ def load_genome_sequence(fasta_file):
     return genome_sequence, genome_length
 
 def save_reads_to_fasta(reads, output_file_name):
-    with open(output_file_name, "w") as output_file:
+    with open("data\\output\\"+output_file_name, "w") as output_file:
         for i, read in enumerate(reads):
             output_file.write(f">read_{i + 1}\n{read}\n")
     print(f"Generated reads saved to '{output_file_name}'")

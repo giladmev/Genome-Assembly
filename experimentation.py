@@ -5,10 +5,10 @@ from generate_assembly_report import calculate_n50
 
 def run_experiment(n, l, p):
     # Generate reads with specified parameters
-    generate_reads("phiX_genome.fasta", l, n, error_prob=p)
+    generate_reads("data\\input\\phiX_genome.fasta", l, n, error_prob=p)
 
     # Assemble reads and compute metrics
-    contigs = assemble_reads("error_prone_reads.fasta", min_overlap=20)
+    contigs = assemble_reads("data\\output\\error_prone_reads.fasta", min_overlap=20)
     n50 = calculate_n50(contigs)
     contig_count = len(contigs)
     largest_contig = max(len(contig) for contig in contigs)
@@ -39,7 +39,7 @@ for n, l, p in itertools.product(n_values, l_values, p_values):
     results.append(result)
 
 # Document findings
-with open("experiment_results.txt", "w") as f:
+with open("data\\output\\experiment_results.txt", "w") as f:
     f.write("n\tl\tp\tN50\tContig Count\tLargest Contig\n")
     for result in results:
         f.write(

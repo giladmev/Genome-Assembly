@@ -3,6 +3,16 @@ from Bio import SeqIO
 
 
 def build_overlap_graph(reads, min_overlap):
+    """
+     Constructs an overlap graph where nodes are reads and edges represent overlaps between reads.
+
+    Args:
+        reads (list): List of read sequences (str).
+        min_overlap (int): Minimum overlap length to consider.
+
+    Returns:
+        dict: A dictionary representing the overlap graph.
+    """
     graph = defaultdict(list)
     for i, read1 in enumerate(reads):
         for j, read2 in enumerate(reads):
@@ -14,6 +24,17 @@ def build_overlap_graph(reads, min_overlap):
 
 
 def find_overlap(read1, read2, min_overlap):
+    """
+    Finds the overlap between two reads..
+
+    Args:
+        read1 (str): The first read sequence.
+        read2 (str): The second read sequence.
+        min_overlap (int): Minimum overlap length to consider.
+
+    Returns:
+        int: The length of the overlap.
+    """
     for i in range(len(read1) - min_overlap + 1):
         if read2.startswith(read1[i:]):
             return len(read1) - i
@@ -21,6 +42,15 @@ def find_overlap(read1, read2, min_overlap):
 
 
 def assemble_genome(graph):
+    """
+    Traverses the graph to generate contigs.
+
+    Args:
+        graph (dict): The overlap graph.
+
+    Returns:
+        list: A list of assembled contigs (str).
+    """
     visited = set()
     contigs = []
 
@@ -49,6 +79,16 @@ def assemble_genome(graph):
 
 
 def assemble_reads(fasta_file, min_overlap):
+    """
+    Main function that loads reads, builds the graph, and assembles the genome.
+
+    Args:
+        fasta_file (str): Path to the FASTA file containing the reads.
+        min_overlap (int): Minimum overlap length to consider.
+
+    Returns:
+        str: Path to the output FASTA file containing the assembled contigs.
+    """
     print(f"Assembling reads from '{fasta_file}'")
     reads = [str(record.seq) for record in SeqIO.parse(fasta_file, "fasta")]
 

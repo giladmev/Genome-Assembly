@@ -95,7 +95,7 @@ def generate_assembly_report(error_free_file, error_prone_file, reference_genome
     report += "- Consider using more sophisticated assembly algorithms that can handle repeats and resolve ambiguities better.\n"
 
     # Write report to file
-    with open("assembly_report.txt", "w") as f:
+    with open("data\\output\\assembly_report.txt", "w") as f:
         f.write(report)
 
     print("Report generated and saved as 'assembly_report.txt'")
