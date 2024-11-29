@@ -1,10 +1,10 @@
 from generate_reads import generate_reads
-from assamble_genome import assemble_reads
+from assamble_genome_improving_performance import assemble_reads
 from generate_assembly_report import generate_assembly_report
 
 
 if __name__ == "__main__":
-    fasta_file = "phiX_genome.fasta"
+    fasta_file = "data/input/phiX_genome.fasta"
     read_length = 100
     num_reads = 10000
     min_overlap = 20
@@ -19,4 +19,5 @@ if __name__ == "__main__":
     # Assemble the reads
     contigs_error_free = assemble_reads(error_free_reads_file, min_overlap)
     contigs_error_prone = assemble_reads(error_prone_reads_file, min_overlap)
-    generate_assembly_report("assembled_contigs_error_free_reads.fasta", "assembled_contigs_error_prone_reads.fasta", "phiX_genome.fasta")
+    generate_assembly_report("data/output/assembled_contigs_error_free_reads.fasta",
+                             "data/output/assembled_contigs_error_prone_reads.fasta", "data/input/phiX_genome.fasta")
