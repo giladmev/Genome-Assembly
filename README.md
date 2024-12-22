@@ -90,7 +90,6 @@ Genome_Assembly/
 ├── main.py                                       # Entry point for running the pipeline.
 ├── config.yaml                                   # YAML configuration file for customizable parameters.
 ├── requirements.txt                              # Required Python dependencies for the project.
-├── venv/             
 ```
 
 
