@@ -77,7 +77,6 @@ def assemble_genome(graph):
 
     return contigs
 
-
 def assemble_reads(fasta_file, min_overlap):
     """
     Main function that loads reads, builds the graph, and assembles the genome.

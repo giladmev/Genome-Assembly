@@ -4,37 +4,45 @@ Genome Assembly Report
 1. Assembly Statistics
 ----------------------
 Contig Count:
-  Error-free: 3872
-  Error-prone: 5107
+  Error-free: 9
+  Error-prone: 1891
 
 Largest Contig:
-  Error-free: 107
-  Error-prone: 477
+  Error-free: 5386
+  Error-prone: 1438
 
 N50:
-  Error-free: 100
-  Error-prone: 100
+  Error-free: 4077
+  Error-prone: 215
 
 Genome Fraction:
   Error-free: 100.0
-  Error-prone: 100.0
+  Error-prone: 24.842183438544374
 
 Total Assembly Length:
-  Error-free: 387913
-  Error-prone: 585544
+  Error-free: 24680
+  Error-prone: 398852
+
+Misassemblies:
+  Error-free: 9
+  Error-prone: 1891
+
+Misassembly Rate:
+  Error-free: 36.46677471636953
+  Error-prone: 474.1106977024059
 
 2. Contig Length Distribution
 ------------------------------
-See 'contig_length_distribution.png' for a visual representation.
+See 'data/output\contig_length_distribution.png' for a visual representation.
 
 3. Analysis
 ------------
 Comparison between error-free and error-prone assemblies:
-- Contig Count: Difference of -1235
-- Largest Contig: Difference of -370
-- N50: Difference of 0
-- Genome Fraction: Difference of 0.0
-- Total Assembly Length: Difference of -197631
+- Contig Count: Difference of -1882
+- Largest Contig: Difference of 3948
+- N50: Difference of 3862
+- Genome Fraction: Difference of 75.15781656145563
+- Total Assembly Length: Difference of -374172
 
 Interpretation:
 - A lower contig count generally indicates a more contiguous assembly.
@@ -44,8 +52,8 @@ Interpretation:
 
 4. Conclusions
 --------------
-Unexpectedly, the error-prone assembly shows higher contiguity. This might be due to aggressive merging of reads despite errors.
-The error-prone assembly unexpectedly covers more of the reference genome. This might indicate over-assembly or duplication.
+The error-free assembly appears to be more contiguous, as expected.
+The error-free assembly covers more of the reference genome, indicating better completeness.
 
 5. Recommendations
 -------------------

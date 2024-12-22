@@ -1,7 +1,6 @@
 import multiprocessing as mp
 from collections import defaultdict
 from Bio import SeqIO
-from itertools import combinations
 
 
 def find_overlap(read1, read2, min_overlap):
@@ -39,31 +38,30 @@ def build_overlap_graph(overlaps):
         graph[read1].append((read2, overlap))
     return graph
 
+def extend_contig(graph, start_read):
+    contig = [start_read]
+    current_read = start_read
+    while True:
+        next_reads = graph[current_read]
+        if not next_reads:
+            break
+        next_read, overlap = max(next_reads, key=lambda x: x[1])
+        if next_read in contig:
+            break
+        contig.append(next_read[overlap:])
+        current_read = next_read
+    return "".join(contig)
 
 def assemble_genome_parallel(graph):
-    def extend_contig(start_read):
-        contig = [start_read]
-        current_read = start_read
-        while True:
-            next_reads = graph[current_read]
-            if not next_reads:
-                break
-            next_read, overlap = max(next_reads, key=lambda x: x[1])
-            if next_read in contig:
-                break
-            contig.append(next_read[overlap:])
-            current_read = next_read
-        return "".join(contig)
-
     with mp.Pool(processes=mp.cpu_count()) as pool:
-        contigs = pool.map(extend_contig, graph.keys())
+        contigs = pool.starmap(extend_contig, [(graph, start_read) for start_read in graph.keys()])
 
     return [contig for contig in contigs if contig]
 
 
 def assemble_reads(fasta_file, min_overlap):
     reads = [str(record.seq) for record in SeqIO.parse(fasta_file, "fasta")]
-
+    print("Assembling reads...")
     print(f"Number of reads: {len(reads)}")
     print(f"Minimum overlap: {min_overlap}")
 
@@ -78,11 +76,11 @@ def assemble_reads(fasta_file, min_overlap):
 
     print(f"Number of contigs: {len(contigs)}")
     print(f"Longest contig length: {max(len(contig) for contig in contigs)}")
-
-    assembled_contigs_file = "assembled_contigs_parallel.fasta"
+    file_details = '_'.join(fasta_file.split("\\")[-1].split(".")[0].split("_")[1:])
+    assembled_contigs_file = f"data\\output\\assembled_contigs_{file_details}.fasta"
     with open(assembled_contigs_file, "w") as f:
         for i, contig in enumerate(contigs):
             f.write(f">contig_{i + 1}\n{contig}\n")
 
     print(f"Assembled contigs saved to '{assembled_contigs_file}'")
-    return contigs, assembled_contigs_file
+    return assembled_contigs_file

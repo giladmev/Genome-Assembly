@@ -8,11 +8,10 @@ def load_genome_sequence(fasta_file):
     return genome_sequence, genome_length
 
 def save_reads_to_fasta(reads, output_file_name):
-    with open("data\\output\\"+output_file_name, "w") as output_file:
+    with open(output_file_name, "w") as output_file:
         for i, read in enumerate(reads):
             output_file.write(f">read_{i + 1}\n{read}\n")
-    print(f"Generated reads saved to '{output_file_name}'")
-    print()
+    print(f"Generated reads saved to '{output_file_name}'\n")
 
 def generate_reads(fasta_file, read_length, num_reads, error_prob=0):
     print(f"Generating reads from '{fasta_file}'")
@@ -44,8 +43,8 @@ def generate_reads(fasta_file, read_length, num_reads, error_prob=0):
             read = "".join(read_with_errors)
 
         reads.append(read)
-
-    output_file_name = "error_prone_reads.fasta" if error_prob > 0 else "error_free_reads.fasta"
+    base_path = "data\\output\\"
+    output_file_name = f"{base_path}reads_l{read_length}_n{num_reads}_p{int(error_prob*100)}%.fasta"
     save_reads_to_fasta(reads, output_file_name)
     return output_file_name
 
