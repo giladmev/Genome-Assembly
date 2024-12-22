@@ -91,7 +91,7 @@ def generate_assembly_report(error_free_file, error_prone_file, reference_genome
     # Generate the histogram
     report += "2. Contig Length Distribution\n"
     report += "------------------------------\n"
-    output_dir = "data/output"
+    output_dir = "../data/output"
 
     # Prepare data for histograms
     error_free_lengths = [len(contig) for contig in error_free_contigs]
@@ -150,51 +150,8 @@ def generate_assembly_report(error_free_file, error_prone_file, reference_genome
     report += "- Consider using more sophisticated assembly algorithms that can handle repeats and resolve ambiguities better.\n"
 
     # Write report to file
-    with open("data\\output\\assembly_report.txt", "w") as f:
+    with open(f"{output_dir}\\assembly_report.txt", "w") as f:
         f.write(report)
 
     print("Report generated and saved as 'assembly_report.txt'")
     print("Contig length distribution plot saved as 'contig_length_distribution.png'")
-
-    # Bar Plot: Quantitative Comparisons
-    metrics_to_plot = ["Contig Count", "Largest Contig", "N50", "Total Assembly Length"]
-    error_free_values = [metrics["Error-free"][metric] for metric in metrics_to_plot]
-    error_prone_values = [metrics["Error-prone"][metric] for metric in metrics_to_plot]
-
-    plt.figure(figsize=(12, 6))
-    x = range(len(metrics_to_plot))
-    plt.bar(x, error_free_values, width=0.4, label="Error-Free", color="green", align="center")
-    plt.bar([p + 0.4 for p in x], error_prone_values, width=0.4, label="Error-Prone", color="red", align="center")
-    plt.xticks([p + 0.2 for p in x], metrics_to_plot)
-    plt.ylabel("Value")
-    plt.title("Comparison of Metrics Between Error-Free and Error-Prone Assemblies")
-    plt.legend()
-    plt.show()
-
-    # Pie Charts: Genome Fraction
-    genome_fraction_free = metrics["Error-free"]["Genome Fraction"]
-    genome_fraction_prone = metrics["Error-prone"]["Genome Fraction"]
-
-    fig, ax = plt.subplots(1, 2, figsize=(12, 6))
-    ax[0].pie([genome_fraction_free, 100 - genome_fraction_free],
-              labels=["Covered", "Uncovered"], autopct="%1.1f%%", colors=["green", "gray"])
-    ax[0].set_title("Error-Free Genome Fraction")
-    ax[1].pie([genome_fraction_prone, 100 - genome_fraction_prone],
-              labels=["Covered", "Uncovered"], autopct="%1.1f%%", colors=["red", "gray"])
-    ax[1].set_title("Error-Prone Genome Fraction")
-    plt.show()
-
-    # Scatter Plot: Misassembly Rate vs Total Assembly Length
-    total_length_free = metrics["Error-free"]["Total Assembly Length"]
-    total_length_prone = metrics["Error-prone"]["Total Assembly Length"]
-    misassembly_rate_free = metrics["Error-free"]["Misassembly Rate"]
-    misassembly_rate_prone = metrics["Error-prone"]["Misassembly Rate"]
-
-    plt.figure(figsize=(8, 6))
-    plt.scatter(total_length_free, misassembly_rate_free, color="green", label="Error-Free", s=100)
-    plt.scatter(total_length_prone, misassembly_rate_prone, color="red", label="Error-Prone", s=100)
-    plt.xlabel("Total Assembly Length")
-    plt.ylabel("Misassembly Rate")
-    plt.title("Misassembly Rate vs Total Assembly Length")
-    plt.legend()
-    plt.show()

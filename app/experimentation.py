@@ -5,7 +5,7 @@ from generate_assembly_report import calculate_n50
 
 def run_experiment(n, l, p):
     # Generate reads with specified parameters
-    generate_reads("data\\input\\phiX_genome.fasta", l, n, error_prob=p)
+    generate_reads("../data/input/phiX_genome.fasta", l, n, error_prob=p)
 
     # Assemble reads and compute metrics
     contigs = assemble_reads("data\\output\\error_prone_reads.fasta", min_overlap=20)

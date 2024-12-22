@@ -59,7 +59,7 @@ def assemble_genome_parallel(graph):
     return [contig for contig in contigs if contig]
 
 
-def assemble_reads(fasta_file, min_overlap):
+def assemble_reads(fasta_file, min_overlap, output_dir):
     reads = [str(record.seq) for record in SeqIO.parse(fasta_file, "fasta")]
     print("Assembling reads...")
     print(f"Number of reads: {len(reads)}")
@@ -77,7 +77,7 @@ def assemble_reads(fasta_file, min_overlap):
     print(f"Number of contigs: {len(contigs)}")
     print(f"Longest contig length: {max(len(contig) for contig in contigs)}")
     file_details = '_'.join(fasta_file.split("\\")[-1].split(".")[0].split("_")[1:])
-    assembled_contigs_file = f"data\\output\\assembled_contigs_{file_details}.fasta"
+    assembled_contigs_file = f"{output_dir}\\assembled_contigs_{file_details}.fasta"
     with open(assembled_contigs_file, "w") as f:
         for i, contig in enumerate(contigs):
             f.write(f">contig_{i + 1}\n{contig}\n")

@@ -1,0 +1,13 @@
+input:
+  genome_fasta: "data/input/phiX_genome.fasta"
+
+output:
+  directory: "../data/output"
+
+sequencing:
+  read_length: 100
+  num_reads: 10000
+
+assembly:
+  min_overlap: 20
+  error_prob: 0.01

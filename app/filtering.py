@@ -25,7 +25,7 @@ def filter_chunk(chunk, all_contigs, min_length, coverage_threshold):
     return unique_contigs
 
 
-def filter_contigs_parallel(file_name, min_length=100, coverage_threshold=0.9):
+def filter_contigs(file_name, min_length=100, coverage_threshold=0.9):
     # Read contigs from file
     contigs = list(SeqIO.parse(file_name, "fasta"))
 
