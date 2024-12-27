@@ -1,5 +1,7 @@
 import random
 from Bio import SeqIO
+import os
+
 
 def load_genome_sequence(fasta_file):
     record = next(SeqIO.parse(fasta_file, "fasta"))
@@ -7,11 +9,11 @@ def load_genome_sequence(fasta_file):
     genome_length = len(genome_sequence)
     return genome_sequence, genome_length
 
-def save_reads_to_fasta(reads, output_file_name):
-    with open(output_file_name, "w") as output_file:
+def save_reads_to_fasta(reads, output_file_path):
+    with open(output_file_path, "w") as output_file:
         for i, read in enumerate(reads):
             output_file.write(f">read_{i + 1}\n{read}\n")
-    print(f"Generated reads saved to '{output_file_name}'\n")
+    print(f"Generated reads saved to '{output_file_path}'\n")
 
 def generate_reads(fasta_file, read_length, num_reads, output_dir, error_prob=0):
     print(f"Generating reads from '{fasta_file}'")
@@ -43,7 +45,9 @@ def generate_reads(fasta_file, read_length, num_reads, output_dir, error_prob=0)
             read = "".join(read_with_errors)
 
         reads.append(read)
-    output_file_name = f"{output_dir}\\reads_l{read_length}_n{num_reads}_p{int(error_prob*100)}%.fasta"
-    save_reads_to_fasta(reads, output_file_name)
-    return output_file_name
+
+    output_file_name = f"reads_l{read_length}_n{num_reads}_p{int(error_prob*100)}%.fasta"
+    output_file_path = os.path.join(output_dir, output_file_name)
+    save_reads_to_fasta(reads, output_file_path)
+    return output_file_path
 

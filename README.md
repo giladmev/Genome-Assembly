@@ -53,14 +53,13 @@ The config.yaml file allows customization of various parameters:
 # Load your config parameters
 config = load_config()
 
-# Generate your sequencing reads
-reads = generate_reads("path_to_reads.fasta")
+# Run experiments for all combinations of parameters
+for n, l, p in itertools.product(n_values, l_values, p_values):
+    result = run_experiment(n, l, p, genome_fasta_file, fasta_files_output_dir)
+    
+# Visualize findings
+visualize_results(results_file, results_output_dir)
 
-# Run assembly
-contigs = assemble_reads(reads_file_path)
-
-# Calculate assembly metrics and generate report
-generate_assembly_report(contigs_file_path)
 ```
 
 ## Project Structure
@@ -71,7 +70,6 @@ Genome_Assembly/
 │   ├── assemble_genome.py                        # Main script for genome assembly.
 │   ├── assemble_genome_improving_performance.py  # Performance-optimized genome assembly.
 │   ├── filtering.py                              # Scripts to filter redundant contigs.
-│   ├── experimentation.py                        # For experimentation and testing of assembly methods.
 │   ├── generate_assembly_report.py               # Generates a detailed assembly report.
 │
 ├── data/
@@ -79,15 +77,23 @@ Genome_Assembly/
 │   │   ├── phiX_genome.fasta                     # Example input genome file.
 │   │
 │   ├── output/
-│       ├── assembled_contigs_l100_n10000_p0%.fasta   # Assembled contigs with specific parameters.
-│       ├── assembled_contigs_l100_n10000_p1%.fasta   # Assembled contigs with different parameters.
-│       ├── assembly_quality_performance_measures.pdf # PDF explanation of performance metrics.
-│       ├── assembly_report.txt                     # Text-based assembly report.
-│       ├── contig_length_distribution.png          # Visualization of contig length distribution.
-│       ├── reads_l100_n10000_p0%.fasta             # Reads generated with specific parameters.
-│       ├── reads_l100_n10000_p1%.fasta             # Reads generated with different parameters.
+│       ├── faste_files
+│       ├── results
+│           ├── contig_count_analysis.png
+│           ├── experiment_results.txt
+│           ├── largest_contig_analysis.png
+│           ├── n50_analysis.png
+│       ├── test_results
+│           ├── assembled_contigs_l100_n10000_p0%.fasta   # Assembled contigs with specific parameters.
+│           ├── assembled_contigs_l100_n10000_p1%.fasta   # Assembled contigs with different parameters.
+│           ├── assembly_quality_performance_measures.pdf # PDF explanation of performance metrics.
+│           ├── assembly_report.txt                     # Text-based assembly report.
+│           ├── contig_length_distribution.png          # Visualization of contig length distribution.
+│           ├── reads_l100_n10000_p0%.fasta             # Reads generated with specific parameters.
+│           ├── reads_l100_n10000_p1%.fasta             # Reads generated with different parameters.
 │
-├── main.py                                       # Entry point for running the pipeline.
+├── experimentation.py                        # For experimentation and testing of assembly methods.
+├── test.py                                       # Entry point for running the pipeline.
 ├── config.yaml                                   # YAML configuration file for customizable parameters.
 ├── requirements.txt                              # Required Python dependencies for the project.
 ```

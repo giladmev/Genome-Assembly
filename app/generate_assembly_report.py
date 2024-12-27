@@ -60,7 +60,7 @@ def calculate_genome_fraction(assembly, reference):
     return (covered_bases / len(reference)) * 100
 
 
-def generate_assembly_report(error_free_file, error_prone_file, reference_genome_file):
+def generate_assembly_report(error_free_file, error_prone_file, reference_genome_file, output_dir):
     # Load contigs and reference genome
     error_free_contigs = list(SeqIO.parse(error_free_file, "fasta"))
     error_prone_contigs = list(SeqIO.parse(error_prone_file, "fasta"))
@@ -91,7 +91,6 @@ def generate_assembly_report(error_free_file, error_prone_file, reference_genome
     # Generate the histogram
     report += "2. Contig Length Distribution\n"
     report += "------------------------------\n"
-    output_dir = "../data/output"
 
     # Prepare data for histograms
     error_free_lengths = [len(contig) for contig in error_free_contigs]
@@ -150,7 +149,7 @@ def generate_assembly_report(error_free_file, error_prone_file, reference_genome
     report += "- Consider using more sophisticated assembly algorithms that can handle repeats and resolve ambiguities better.\n"
 
     # Write report to file
-    with open(f"{output_dir}\\assembly_report.txt", "w") as f:
+    with open(os.path.join(output_dir, "assembly_report.txt"), "w") as f:
         f.write(report)
 
     print("Report generated and saved as 'assembly_report.txt'")
