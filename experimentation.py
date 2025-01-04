@@ -2,13 +2,19 @@ import itertools
 from app.generate_reads import generate_reads
 from app.assamble_genome_improving_performance import assemble_reads
 from app.generate_assembly_report import calculate_n50
+from app.visualize_results import visualize_results
 import yaml
 from pathlib import Path
 import os
-import matplotlib.pyplot as plt
-import pandas as pd
 from Bio import SeqIO
 
+
+def run_all_experiments(num_reads_values, read_length_values, error_prob_values, genome_fasta_file, output_dir):
+    results = []
+    for n, l, p in itertools.product(num_reads_values, read_length_values, error_prob_values):
+        result = run_experiment(n, l, p, genome_fasta_file, output_dir)
+        results.append(result)
+    return results
 
 def run_experiment(n, l, p, genome_fasta_file, output_dir):
     # Generate reads with specified parameters
@@ -29,10 +35,6 @@ def run_experiment(n, l, p, genome_fasta_file, output_dir):
     contig_count = len(contigs)
     largest_contig = max(len(contig) for contig in contigs)
 
-    # Print results
-    print(f"Parameters: n={n}, l={l}, p={p}")
-    print(f"N50: {n50}, Contig Count: {contig_count}, Largest Contig: {largest_contig}\n")
-
     return {
         "n": n,
         "l": l,
@@ -51,45 +53,16 @@ def load_config(config_path="config.yaml"):
     Path(config['output']['directories']['results']).mkdir(parents=True, exist_ok=True)
     return config
 
-def load_results(filepath):
-    """Load experiment results from TSV file"""
-    return pd.read_csv(filepath, sep='\t')
+def document_findings(results):
+    results_file = os.path.join(results_output_dir, "experiment_results.txt")
+    with open(results_file, "w") as f:
+        f.write("n\tl\tp\tN50\tContig Count\tLargest Contig\n")
+    for result in results:
+        f.write(f"{result['n']}\t{result['l']}\t{result['p']}\t{result['N50']}\t{result['Contig Count']}\t{result['Largest Contig']}\n")
 
-def create_line_plots(df, output_dir):
-    metrics = ['N50', 'Contig Count', 'Largest Contig']
-    params = ['n', 'l', 'p']
+    print("Experiment results saved to 'experiment_results.txt'")
+    return results_file
 
-    for metric in metrics:
-        fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-        fig.suptitle(f'{metric} vs Parameters')
-
-        for idx, param in enumerate(params):
-            # Create separate lines for other parameters combinations
-            other_params = [p for p in params if p != param]
-
-            for val1 in df[other_params[0]].unique():
-                for val2 in df[other_params[1]].unique():
-                    mask = (df[other_params[0]] == val1) & (df[other_params[1]] == val2)
-                    data = df[mask].sort_values(param)
-                    axes[idx].plot(data[param], data[metric],
-                                   label=f'{other_params[0]}={val1}, {other_params[1]}={val2}')
-
-            axes[idx].set_xlabel(param)
-            axes[idx].set_ylabel(metric)
-            axes[idx].legend(bbox_to_anchor=(1.05, 1), loc='upper left')
-            axes[idx].grid(True)
-
-        plt.tight_layout()
-        plt.savefig(Path(output_dir) / f'{metric.lower().replace(" ", "_")}_analysis.png',
-                    bbox_inches='tight', dpi=300)
-        plt.close()
-
-def visualize_results(results_file, output_dir):
-    """Main function to create all visualizations"""
-    Path(output_dir).mkdir(parents=True, exist_ok=True)
-    df = load_results(results_file)
-
-    create_line_plots(df, output_dir)
 
 if __name__ == "__main__":
     config = load_config()
@@ -102,23 +75,7 @@ if __name__ == "__main__":
     p_values = config['assembly']['error_prob']
 
     # Run experiments for all combinations of parameters
-    results_file = os.path.join(results_output_dir, "experiment_results.txt")
-    results = []
+    experiments_results = run_all_experiments(n_values, l_values, p_values, genome_fasta_file, fasta_files_output_dir)
 
-    if os.path.exists(results_file):
-        print(f"Results file '{results_file}' found. Reading results...")
-        visualize_results(results_file, results_output_dir)
-    else:
-        for n, l, p in itertools.product(n_values, l_values, p_values):
-            result = run_experiment(n, l, p, genome_fasta_file, fasta_files_output_dir)
-            results.append(result)
-
-        # Document findings
-        with open(results_file, "w") as f:
-            f.write("n\tl\tp\tN50\tContig Count\tLargest Contig\n")
-            for result in results:
-                f.write(
-                    f"{result['n']}\t{result['l']}\t{result['p']}\t{result['N50']}\t{result['Contig Count']}\t{result['Largest Contig']}\n")
-
-        print("Experiment results saved to 'experiment_results.txt'")
-        visualize_results(results_file, results_output_dir)
+    results_file_path = document_findings(experiments_results)
+    visualize_results(results_file_path, results_output_dir)

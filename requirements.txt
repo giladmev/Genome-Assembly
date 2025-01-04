@@ -1,5 +1,6 @@
 numpy
-matplotlib
-pandas
+matplotlib~=3.9.2
+pandas~=2.2.3
 biopython
-pyyaml
+pyyaml~=6.0.2
+bio~=1.7.1
