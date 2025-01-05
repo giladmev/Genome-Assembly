@@ -1,7 +1,7 @@
 import time
 from app.generate_reads import generate_reads
 from app.assamble_genome_improving_performance import assemble_reads
-from app.generate_assembly_report import generate_assembly_report
+from app.calculate_assembled_metrics import generate_assembly_report
 import yaml
 from pathlib import Path
 
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     read_length = config['sequencing']['read_length'][1]
     num_reads = config['sequencing']['num_reads'][1]
     min_overlap = config['assembly']['min_overlap']
-    error_prob = config['assembly']['error_prob'][1]
+    error_probabilities = config['assembly']['error_probabilities'][1]
 
     # Generate error-free reads
     error_free_reads_file_path = generate_reads(genome_fasta_file, read_length, num_reads, fasta_files_output_dir)

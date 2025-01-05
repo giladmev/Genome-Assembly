@@ -15,7 +15,15 @@ def save_reads_to_fasta(reads, output_file_path):
             output_file.write(f">read_{i + 1}\n{read}\n")
     print(f"Generated reads saved to '{output_file_path}'\n")
 
-def generate_reads(fasta_file, read_length, num_reads, output_dir, error_prob=0):
+def generate_reads(fasta_file, read_length, num_reads, output_dir, error_prob=0, overwrite=False):
+    output_file_name = f"reads_l{read_length}_n{num_reads}_p{int(error_prob*100)}%.fasta"
+    output_file_path = os.path.join(output_dir, output_file_name)
+    if not overwrite and os.path.exists(output_dir):
+        output_files = os.listdir(output_dir)
+        if output_file_name in output_files:
+            print(f"Reads already generated for read length {read_length}, number of reads {num_reads}, and error probability {error_prob}")
+            return output_file_path
+
     print(f"Generating reads from '{fasta_file}'")
     genome_sequence, genome_length = load_genome_sequence(fasta_file)
     coverage = (num_reads * read_length) / genome_length
@@ -46,8 +54,6 @@ def generate_reads(fasta_file, read_length, num_reads, output_dir, error_prob=0)
 
         reads.append(read)
 
-    output_file_name = f"reads_l{read_length}_n{num_reads}_p{int(error_prob*100)}%.fasta"
-    output_file_path = os.path.join(output_dir, output_file_name)
     save_reads_to_fasta(reads, output_file_path)
     return output_file_path
 

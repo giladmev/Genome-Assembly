@@ -42,7 +42,6 @@ This project implements a genome assembly pipeline using overlap graphs. It incl
 - generate_reads.py: Generate error-free and error-prone reads
 - assamble_genome_improving_performance.py: Assemble reads into contigs
 - filtering.py: Filter and remove redundant contigs
-- generate_assembly_report.py: Generate assembly quality metrics
 - experimentation.py: Run experiments with varying parameters
 - test.py: Perform a single test run
 

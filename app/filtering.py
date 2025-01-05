@@ -40,5 +40,8 @@ def filter_contigs(contigs, min_length=100, coverage_threshold=0.9):
                                [(chunk, min_length, coverage_threshold) for chunk in chunks])
 
     # Combine results
-    return [contig for chunk_result in results for contig in chunk_result]
+    filtered_contigs = [contig for chunk_result in results for contig in chunk_result]
+    if not filtered_contigs:
+        return contigs
+    return filtered_contigs
 
