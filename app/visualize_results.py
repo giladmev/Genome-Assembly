@@ -5,7 +5,6 @@ import numpy as np
 import os
 import ast
 import seaborn as sns
-from scipy import stats
 from scipy.stats import gaussian_kde
 
 
@@ -104,8 +103,6 @@ def plot_contig_length_distribution(contig_lengths_file, output_dir):
     output_path = os.path.join(output_dir, 'contig_length_distribution.png')
     plt.savefig(output_path)
     print(f"contig_length_distribution plot saved to '{output_path}'")
-
-
     plt.close()
 
 def plot_metrics_by_p(results_file, output_dir):

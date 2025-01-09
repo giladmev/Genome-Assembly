@@ -62,10 +62,12 @@ The experimentation.py script:
 - N50: Contig length at which 50% of the assembly is in contigs of this size or larger
 - Contig Count: Total number of assembled contigs
 - Largest Contig: Length of the longest assembled contig
+- Genome Fraction: Proportion of the reference genome covered by the largest contig
 
 ### Results
 Experiment results are saved in:
 - experiment_results.txt: TSV file with metrics for each parameter combination
+- contig_lengths.txt: TSV file with distributions across sequencing error rates
 - PNG files in the results directory: Visualizations of metrics vs. parameters
 
 ## Contact
